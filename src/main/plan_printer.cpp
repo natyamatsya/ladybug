@@ -1,6 +1,7 @@
 #include "main/plan_printer.h"
 
 #include <algorithm>
+#include <cstdlib>
 #include <sstream>
 
 #include "planner/operator/logical_plan.h"

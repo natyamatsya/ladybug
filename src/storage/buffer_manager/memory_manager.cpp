@@ -1,5 +1,6 @@
 #include "storage/buffer_manager/memory_manager.h"
 
+#include <cstdlib>
 #include <mutex>
 
 #include "common/exception/buffer_manager.h"

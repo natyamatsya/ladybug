@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdlib>
+
 #include "common/utils.h"
 
 struct ArrowSchema;

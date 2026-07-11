@@ -1,5 +1,7 @@
 #include "common/types/value/value.h"
 
+#include <cstdlib>
+
 #include "c_api/helpers.h"
 #include "c_api/lbug.h"
 #include "common/constants.h"
