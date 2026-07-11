@@ -513,6 +513,11 @@ if(EMSCRIPTEN AND TARGET lbug AND NOT TARGET lbug_shared)
 endif()
 
 if (${BUILD_TESTS} OR ${BUILD_EXTENSION_TESTS})
+    # enable_testing() must run in the top-level directory so CMake generates a
+    # root CTestTestfile.cmake that recurses into test/. (test/CMakeLists.txt
+    # also calls it, but that alone roots the CTest tree at test/, leaving
+    # `ctest` at the build root seeing zero tests.)
+    enable_testing()
     add_subdirectory(test)
 elseif (${BUILD_BENCHMARK})
     add_subdirectory(test/test_helper)
