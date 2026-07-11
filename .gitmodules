@@ -7,9 +7,6 @@
 [submodule "dataset"]
 	path = dataset
 	url = https://github.com/ladybugdb/dataset.git
-[submodule "tools/java_api"]
-	path = tools/java_api
-	url = https://github.com/ladybugdb/ladybug-java
 [submodule "tools/nodejs_api"]
 	path = tools/nodejs_api
 	url = https://github.com/ladybugdb/ladybug-nodejs
