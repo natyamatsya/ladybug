@@ -409,6 +409,13 @@ static void updateNodes(uint64_t startID, uint64_t num, lbug::main::Database& da
     }
 }
 
+// NOTE: the three EmptyDBTransactionTest.Concurrent*Updates cases below each
+// spawn several writer threads and issue ~24k autocommit updates, taking ~80s
+// single-threaded. They are correct and pass in isolation, but under parallel
+// `ctest -jN` they oversubscribe the CPU and can hit the per-test timeout, so
+// they are registered RUN_SERIAL in CMakeLists.txt (add_lbug_test). They also
+// exercise the *default-off, debug-gated* multi-writer path
+// (debug_enable_multi_writes) — Kùzu is single-writer by default.
 TEST_F(EmptyDBTransactionTest, ConcurrentNodeUpdates) {
     if (systemConfig->checkpointThreshold == 0) {
         GTEST_SKIP();

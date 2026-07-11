@@ -389,6 +389,25 @@ function(add_lbug_test TEST_NAME)
             DISCOVERY_MODE PRE_TEST
             TEST_PREFIX e2e_test_
         )
+    elseif (TEST_NAME STREQUAL "transaction_test")
+        # The EmptyDBTransactionTest.Concurrent*Updates cases each spawn 4-8
+        # writer threads and issue ~24k autocommit updates, running ~80s
+        # single-threaded. Under `ctest -jN` several of them co-schedule,
+        # oversubscribe the CPU and blow the per-test timeout (they are correct
+        # and pass in isolation — see EmptyDBTransactionTest comments). Register
+        # just those three RUN_SERIAL with a generous timeout so the suite is
+        # green under parallel ctest; everything else runs in parallel normally.
+        gtest_discover_tests(${TEST_NAME}
+            DISCOVERY_TIMEOUT 600
+            DISCOVERY_MODE PRE_TEST
+            TEST_FILTER -*Concurrent*Updates
+        )
+        gtest_discover_tests(${TEST_NAME}
+            DISCOVERY_TIMEOUT 600
+            DISCOVERY_MODE PRE_TEST
+            TEST_FILTER *Concurrent*Updates
+            PROPERTIES RUN_SERIAL TRUE TIMEOUT 600
+        )
     else()
         gtest_discover_tests(${TEST_NAME}
             DISCOVERY_TIMEOUT 600

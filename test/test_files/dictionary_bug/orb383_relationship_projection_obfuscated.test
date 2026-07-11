@@ -4,6 +4,11 @@
 --
 
 -CASE AnonymousParquetDeleteReload
+# Requires the generated parquet fixtures (A/B/A_TO_B.parquet) produced by
+# `uv run --with pyarrow python3 scripts/generate-dictionary-bug-fixture.py`
+# from the committed *.zlib raw data. They are gitignored (generated in CI, see
+# ci-workflow.yml "Generate datasets"), so run that generator before this test
+# locally.
 -STATEMENT CREATE NODE TABLE `A` (`id` INT64, `key` STRING, PRIMARY KEY(`id`));
 ---- ok
 
