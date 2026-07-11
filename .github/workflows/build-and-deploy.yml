@@ -615,7 +615,7 @@ jobs:
 
       - name: Build and push builder image
         if: ${{ steps.image-exists.outputs.exists != 'true' }}
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: .github/docker/ubuntu-22.04-gcc13/Dockerfile

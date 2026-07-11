@@ -83,7 +83,7 @@ jobs:
     name: sanity checks
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Check source headers for include guards
         run: ./scripts/check-include-guards.sh src/include
@@ -127,7 +127,7 @@ jobs:
       - name: Install clang-format dependencies
         run: apk add --no-cache git python3 clang18-extra-tools
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
@@ -152,7 +152,7 @@ jobs:
       - uses: ilammy/msvc-dev-cmd@v1
         if: matrix.platform == 'windows'
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Checkout dataset and benchmarks
         run: |
@@ -316,7 +316,7 @@ jobs:
       AZURE_PUBLIC_CONTAINER: ${{ secrets.AZURE_PUBLIC_CONTAINER }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Checkout extensions
         run: |

@@ -86,7 +86,7 @@ jobs:
 
           git config --system --add safe.directory /__w/ladybug/ladybug
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Check source headers for include guards
         run: ./scripts/check-include-guards.sh src/include
@@ -135,7 +135,7 @@ jobs:
 
           git config --system --add safe.directory /__w/ladybug/ladybug
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
@@ -182,7 +182,7 @@ jobs:
           git config --system --add safe.directory /__w/ladybug/ladybug
           su-exec "$RUNNER_USER:$RUNNER_GROUP" env HOME="$RUNNER_HOME" git config --global --add safe.directory /__w/ladybug/ladybug
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Fix workspace ownership for non-root user
         run: chown -R "$(id -u "$RUN_AS_USER")":"$(id -g "$RUN_AS_USER")" /__w/ladybug/ladybug
@@ -274,7 +274,7 @@ jobs:
           git config --system --add safe.directory /__w/ladybug/ladybug
           su-exec "$RUNNER_USER:$RUNNER_GROUP" env HOME="$RUNNER_HOME" git config --global --add safe.directory /__w/ladybug/ladybug
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Fix workspace ownership for non-root user
         run: chown -R "$(id -u "$RUN_AS_USER")":"$(id -g "$RUN_AS_USER")" /__w/ladybug/ladybug

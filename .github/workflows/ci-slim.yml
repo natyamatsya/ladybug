@@ -1,0 +1,81 @@
+name: Slim CI (build + ctest)
+
+# Purpose-built CI for this vendored fork: configure with the lean flag set
+# Sourcetrail uses, build the library + tests, and run the full ctest suite.
+# It is CMake-driven end to end (the root Makefile was removed) and skips the
+# shell, benchmarks, single-file header and language bindings.
+#
+# Validated locally on macOS/AppleClang (C++23). This job runs on
+# ubuntu/libstdc++, so it may surface additional portability fixes — that is
+# the point of having it.
+#
+# NOTE: push and pull_request triggers are intentionally DISABLED to avoid
+# consuming CI minutes. The workflow runs on manual dispatch only. Re-enable
+# automatic runs by uncommenting the blocks below.
+on:
+  workflow_dispatch:
+  # push:
+  #   branches: [main]
+  # pull_request:
+  #   branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-slim-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: build & ctest (ubuntu-24.04)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Checkout dataset submodule (needed by e2e tests)
+        run: git submodule update --init --depth 1 dataset
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build libssl-dev
+
+      - name: Setup ccache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: ci-slim-${{ runner.os }}
+
+      - name: Install uv (for test-fixture generation)
+        run: pip3 install uv
+
+      - name: Configure
+        run: |
+          cmake -S . -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -DBUILD_SHELL=OFF \
+            -DBUILD_TESTS=ON \
+            -DBUILD_BENCHMARK=OFF \
+            -DBUILD_SINGLE_FILE_HEADER=OFF \
+            -DBUILD_SHARED_LBUG=ON \
+            -DBUILD_STATIC_LBUG=ON \
+            -DAUTO_UPDATE_GRAMMAR=OFF
+
+      - name: Build
+        run: cmake --build build -j "$(nproc)"
+
+      - name: Generate test fixtures
+        # Produces the gitignored dictionary-bug parquet fixtures (orb383 e2e).
+        run: uv run --with pyarrow python3 scripts/generate-dictionary-bug-fixture.py
+
+      - name: Test
+        # --test-load throttles ctest scheduling by system load average so the
+        # multi-threaded concurrency/copy tests don't oversubscribe the CPU and
+        # time out; the generous per-test timeout is the safety net for those
+        # heavy tests under load. (The three worst Concurrent*Updates cases are
+        # additionally RUN_SERIAL — see add_lbug_test in CMakeLists.txt.)
+        run: >
+          ctest --test-dir build --output-on-failure
+          -j "$(nproc)" --test-load "$(nproc)" --timeout 1200

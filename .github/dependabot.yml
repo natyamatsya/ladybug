@@ -1,0 +1,12 @@
+version: 2
+updates:
+  # Keep GitHub Actions up to date. Dependabot bumps both tag-pinned (@vN) and
+  # SHA-pinned (@<sha>) actions to their latest release, opening a PR per update.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      actions:
+        patterns:
+          - "*"

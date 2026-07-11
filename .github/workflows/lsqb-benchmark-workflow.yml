@@ -43,7 +43,7 @@ jobs:
             echo "TIMEOUT=${{ github.event.inputs.timeout }}" >> $GITHUB_ENV
             echo "SCALE_FACTOR=${{ github.event.inputs.scale_factor }}" >> $GITHUB_ENV
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Update submodules
         run: git submodule update --init --recursive benchmark tools/python_api
