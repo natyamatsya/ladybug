@@ -1,5 +1,7 @@
 #include "processor/operator/aggregate/base_aggregate.h"
 
+#include <bit>
+
 #include "main/client_context.h"
 #include "processor/operator/aggregate/aggregate_hash_table.h"
 
