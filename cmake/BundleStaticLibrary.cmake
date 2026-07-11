@@ -16,8 +16,11 @@ set(BUNDLED_LIBRARY "${OUTPUT}.bundled")
 file(REMOVE "${BUNDLED_LIBRARY}")
 
 if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin")
+    # -no_warning_for_no_symbols silences the benign "has no symbols" notices
+    # for object files that legitimately compile to nothing on this platform
+    # (e.g. windows_utils.cpp on macOS, or crypto units disabled via config).
     execute_process(
-        COMMAND libtool -static -o "${BUNDLED_LIBRARY}" "${MAIN_LIBRARY}" ${STATIC_LIBRARY_LIST}
+        COMMAND libtool -static -no_warning_for_no_symbols -o "${BUNDLED_LIBRARY}" "${MAIN_LIBRARY}" ${STATIC_LIBRARY_LIST}
         RESULT_VARIABLE BUNDLE_RESULT
         COMMAND_ERROR_IS_FATAL ANY)
 elseif(CMAKE_HOST_WIN32)
