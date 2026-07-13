@@ -1,14 +1,16 @@
 name: GitHub Actions Security Analysis with zizmor 🌈
 
 on:
-  push:
-    branches: ["main"]
-    paths:
-      - ".github/workflows/**"
-  pull_request:
-    branches: ["**"]
-    paths:
-      - ".github/workflows/**"
+  workflow_dispatch:
+  # Automatic triggers disabled to save CI budget; re-enable when budget allows.
+  # push:
+  #   branches: ["main"]
+  #   paths:
+  #     - ".github/workflows/**"
+  # pull_request:
+  #   branches: ["**"]
+  #   paths:
+  #     - ".github/workflows/**"
 
 permissions: {}
 

@@ -7,8 +7,9 @@ name: Build and Deploy
 # extension, and precompiled binaries. Restore the bindings' jobs from git
 # history if those language packages are ever reintroduced.
 on:
-  schedule:
-    - cron: "0 11 * * *"
+  # Nightly schedule disabled to save CI budget; re-enable when budget allows.
+  # schedule:
+  #   - cron: "0 11 * * *"
 
   workflow_dispatch:
     inputs:

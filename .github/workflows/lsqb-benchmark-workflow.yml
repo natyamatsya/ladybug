@@ -1,7 +1,8 @@
 name: LSQB Benchmark
 on:
-  schedule:
-    - cron: "0 5 * * *"
+  # Nightly schedule disabled to save CI budget; re-enable when budget allows.
+  # schedule:
+  #   - cron: "0 5 * * *"
 
   workflow_dispatch:
     inputs:
